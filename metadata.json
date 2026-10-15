@@ -1,0 +1,6 @@
+{
+  "name": "SingaRate - Real-time & Offline SGD Currency Converter",
+  "description": "Minimalist real-time foreign currency to Singapore Dollars (SGD) converter with offline rate caching, traveler shopping tally, and bank spread calculation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
