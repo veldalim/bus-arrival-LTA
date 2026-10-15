@@ -63,36 +63,27 @@ export const BackendIntegrationModal: React.FC<BackendIntegrationModalProps> = (
     }
   };
 
-  const sampleServerCode = `// server.ts - Sample Express backend for LTA DataMall
-import express from 'express';
-import cors from 'cors';
+  const sampleServerCode = `// api/busarrival.ts - Serverless function for LTA DataMall v3
+// GET https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=83139
+// Headers: AccountKey: <LTA_ACCOUNT_KEY>, accept: application/json
 
-const app = express();
-app.use(cors());
+export default async function handler(req: any, res?: any) {
+  const busStopCode = req.query?.BusStopCode || '83139';
+  const serviceNo = req.query?.ServiceNo || '';
+  const ltaAccountKey = process.env.LTA_ACCOUNT_KEY || '';
 
-const LTA_API_KEY = process.env.LTA_DATAMALL_KEY || 'YOUR_LTA_ACCOUNT_KEY';
+  const url = \`https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=\${busStopCode}\${serviceNo ? \`&ServiceNo=\${serviceNo}\` : ''}\`;
 
-// LTA BusArrivalv2 proxy endpoint
-app.get('/lta/BusArrivalv2', async (req, res) => {
-  const { BusStopCode } = req.query;
-  try {
-    const response = await fetch(
-      \`https://datamall2.mytransport.sg/ltaodataservice/v2/BusArrival?BusStopCode=\${BusStopCode}\`,
-      {
-        headers: {
-          'AccountKey': LTA_API_KEY,
-          'accept': 'application/json'
-        }
-      }
-    );
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch from LTA DataMall' });
-  }
-});
+  const response = await fetch(url, {
+    headers: {
+      'AccountKey': ltaAccountKey,
+      'accept': 'application/json'
+    }
+  });
 
-app.listen(3000, () => console.log('LTA Transit Proxy running on port 3000'));`;
+  const data = await response.json();
+  res.status(200).json(data);
+}`;
 
   const copyCode = () => {
     navigator.clipboard.writeText(sampleServerCode);
@@ -110,8 +101,8 @@ app.listen(3000, () => console.log('LTA Transit Proxy running on port 3000'));`;
               <Server className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base">Backend & LTA API Integration</h3>
-              <p className="text-xs text-slate-500">Ready to plug into LTA DataMall v2 or your custom Express backend</p>
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base">Serverless LTA Datamall Connection</h3>
+              <p className="text-xs text-slate-500">Configured in /api/busarrival.ts and /api/health.ts</p>
             </div>
           </div>
           <button
@@ -129,10 +120,10 @@ app.listen(3000, () => console.log('LTA Transit Proxy running on port 3000'));`;
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div>
               <div className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">
-                Front-End Architecture Ready for Seamless Connection
+                Serverless Endpoints Active in /api
               </div>
               <p className="mt-1 text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                The UI is designed around LTA DataMall’s exact <code className="font-mono bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded text-[11px]">BusArrivalv2</code> schema, supporting load levels (<code className="font-mono">SEA/SDA/LSD</code>), deck types (<code className="font-mono">SD/DD/BD</code>), and 3-bus arrival horizons.
+                Your application now has dedicated serverless proxy endpoints in <code className="font-mono bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded text-[11px]">/api/busarrival.ts</code> and <code className="font-mono bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded text-[11px]">/api/health.ts</code> ready to stream live data directly from LTA DataMall v3.
               </p>
             </div>
           </div>

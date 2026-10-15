@@ -208,6 +208,17 @@ export const SINGAPORE_BUS_STOPS: LtaBusStop[] = [
     services: ["14", "52", "96", "99", "147", "156", "165", "166", "175", "196", "282", "284"]
   },
 
+  // Eunos
+  {
+    BusStopCode: "83139",
+    RoadName: "Sims Ave East / Jln Eunos",
+    Description: "Opp Eunos Stn",
+    Latitude: 1.3197,
+    Longitude: 103.9029,
+    mrtInterchange: ["EW7"],
+    services: ["15", "21", "25", "51", "55", "60", "63", "93", "94", "854"]
+  },
+
   // Serangoon
   {
     BusStopCode: "66009",
